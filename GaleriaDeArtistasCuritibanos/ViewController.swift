@@ -34,7 +34,8 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
         collectionView.delegate = self
         collectionView.dataSource = self
 
-        collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "cell")
+        //        collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "cell")
+        collectionView.register(ObraCell.self, forCellWithReuseIdentifier: ObraCell.identifier)
 
         self.view.addSubview(collectionView)
     }
@@ -44,9 +45,13 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath)
+        // cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath)
 
+        
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ObraCell.identifier, for: indexPath) as! ObraCell
         let obra = obras[indexPath.row]
+        
+        // obra = obras[indexPath.row]
 
         let obraTitle = UILabel(frame: CGRect(x: 10, y: 110, width: cell.bounds.width - 20, height: 60))
         obraTitle.text = obra.titulo
@@ -79,12 +84,18 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
         cell.contentView.addSubview(obraTitle)
         cell.contentView.addSubview(artistaName)
 
+        cell.configurar(com: obra)
         return cell
     }
 
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: 150, height: 150)
+        return CGSize(width: 150, height: 200)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let detalheVC = DetalheObraViewController()
+        detalheVC.obra = obras[indexPath.row]
+        navigationController?.pushViewController(detalheVC, animated: true)
     }
 }
-
